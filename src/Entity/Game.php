@@ -33,6 +33,11 @@ class Game
      */
     private $rounds;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $nbWords;
+
     public function __construct()
     {
         $this->teams = new ArrayCollection();
@@ -114,6 +119,18 @@ class Game
                 $round->setGame(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getNbWords(): ?int
+    {
+        return $this->nbWords;
+    }
+
+    public function setNbWords(int $nbWords): self
+    {
+        $this->nbWords = $nbWords;
 
         return $this;
     }

@@ -1,22 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Game{% endblock %}
+{% block title %}Partie {{ game.id }}{% endblock %}
 
 {% block body %}
-    <h1>Game</h1>
+    <h1>Partie {{ game.id }}</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ game.id }}</td>
-            </tr>
-            <tr>
-                <th>Date</th>
-                <td>{{ game.date ? game.date|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <p>Lancée le {{ game.date ? game.date|date('d/m/Y à H:i:s') : '' }}</p>
+
+    <p>Teams inscrites :</p>
+    <ul>
+                {% for team in game.teams %}
+                    <li>{{ team.name }}</li>
+                {% endfor %}
+    </ul>
+
+    <p>Inscrire une autre team :</p>
+    <ul>
+    {% for team in teams %}
+        <li><a href="{{ path('add_team_to_game', {'id': game.id, 'team': team.id }) }}">{{ team.name }}</a></li>
+    {% endfor %}
+    </ul>
+
+
 
     <a href="{{ path('game_index') }}">back to list</a>
 

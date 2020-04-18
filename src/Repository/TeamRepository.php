@@ -36,6 +36,22 @@ class TeamRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
+    /**
+     * @param $game
+     * @return Team[] Returns an array of Team objects
+     */
+    public function findTeamsNotInGame($game)
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.game IS NULL')
+            ->orWhere('t.game != :game')
+            ->setParameter('game', $game)
+            ->orderBy('t.name', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Team[] Returns an array of Team objects
     //  */

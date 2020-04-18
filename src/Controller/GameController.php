@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Game;
+use App\Entity\Team;
 use App\Form\GameType;
 use App\Repository\GameRepository;
+use App\Repository\TeamRepository;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,15 +31,16 @@ class GameController extends AbstractController
 
     /**
      * @Route("/new", name="game_new", methods={"GET","POST"})
-     * @param Request $request
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
-    public function new(Request $request): Response
+    public function new()
     {
+        // new Game with date now and actual team
         $game = new Game();
+        $team = $this->getUser();
         $entityManager = $this->getDoctrine()->getManager();
-        $game->setDate(new Datetime());
+        $game->setDate(new Datetime())->addTeam($team)->setNbWords(40);
         $entityManager->persist($game);
         $entityManager->flush();
 
@@ -47,12 +51,35 @@ class GameController extends AbstractController
 
     /**
      * @Route("/{id}", name="game_show", methods={"GET"})
+     * @param Game $game
+     * @param TeamRepository $teams
+     * @return Response
      */
-    public function show(Game $game): Response
+    public function show(Game $game, TeamRepository $teams)
     {
+        $teams = $teams->findTeamsNotInGame($game);
 
         return $this->render('game/show.html.twig', [
             'game' => $game,
+            'teams' => $teams,
+        ]);
+    }
+
+    /**
+     * @Route("{id}/add/{team}", name="add_team_to_game", methods={"GET","POST"})
+     * @param Game $game
+     * @param Team $team
+     * @return Response
+     */
+    public function addTeamToGame(Game $game, Team $team): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $game->addTeam($team);
+        $entityManager->persist($game);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('game_show', [
+            'id' => $game->getId(),
         ]);
     }
 
