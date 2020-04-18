@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Word{% endblock %}
+
+{% block body %}
+    <h1>Create new Word</h1>
+
+    {{ include('word/_form.html.twig') }}
+
+    <a href="{{ path('word_index') }}">back to list</a>
+{% endblock %}
