@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Word{% endblock %}
+
+{% block body %}
+    <h1>Edit Word</h1>
+
+    {{ include('word/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('word_index') }}">back to list</a>
+
+    {{ include('word/_delete_form.html.twig') }}
+{% endblock %}
