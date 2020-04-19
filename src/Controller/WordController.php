@@ -18,6 +18,8 @@ class WordController extends AbstractController
 {
     /**
      * @Route("/word/", name="word_index", methods={"GET"})
+     * @param WordRepository $wordRepository
+     * @return Response
      */
     public function index(WordRepository $wordRepository): Response
     {
@@ -36,8 +38,9 @@ class WordController extends AbstractController
      */
     public function new(Game $game, WordRepository $choices, RoundRepository $rounds, Request $request): Response
     {
-        // number words to add from the team
-        $nbwords = 4;
+        // number words to add for each team
+        $nbteams = count($game->getTeams());
+        $nbwords = round(40 / $nbteams);
 
         // find words already add by the team
         $words = $rounds->findLinesFromOneCreator($game, $this->getUser());

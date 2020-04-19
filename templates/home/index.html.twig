@@ -3,14 +3,16 @@
 {% block title %}Time's Up !{% endblock %}
 
 {% block body %}
-    <main class="index">
-        <h1 class="p-3">Time's Up !</h1>
-        <a href="{{ path('game_join') }}" title="Rejoindre une partie">Rejoindre une partie</a>
-        <a href="{{ path('game_new') }}" title="Nouvelle partie">Nouvelle partie</a>
-        {% if app.user.id is defined %}
-        <a href="{{ path('team_show', {'id':app.user.id }) }}" title="Mon équipe">Mon équipe</a>
-        {% else %}
-        <a href="{{ path('app_register') }}" title="Nouvelle équipe">Crée ton équipe</a>
-        {% endif %}
+    <main class="index container">
+
+        <div class="row">
+            <div class="col text-center p-3">
+            {% if app.user.id is defined %}
+            <a href="{{ path('game_play') }}" title="Jouer" class="secondary-button">Je joue!</a>
+            {% else %}
+            <a href="{{ path('app_register') }}" title="Nouvelle équipe" class="secondary-button">Je crée mon équipe</a>
+            {% endif %}
+            </div>
+        </div>
     </main>
 {% endblock %}
