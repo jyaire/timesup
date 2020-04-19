@@ -3,13 +3,18 @@
 namespace App\Controller;
 
 use App\Entity\Game;
+use App\Entity\Round;
 use App\Entity\Team;
+use App\Entity\Word;
 use App\Form\GameType;
 use App\Repository\GameRepository;
+use App\Repository\RoundRepository;
 use App\Repository\TeamRepository;
+use App\Repository\WordRepository;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -83,12 +88,72 @@ class GameController extends AbstractController
 
     /**
      * @Route("/play", name="game_play")
+     * @param RoundRepository $rounds
+     * @return Response
      */
-    public function play()
+    public function play(RoundRepository $rounds)
     {
         $game = $this->getUser()->getGame();
+        $words = $rounds->findLinesRound1($game);
+        $round = 1;
+        if(empty($words)) {
+            $words = $rounds->findLinesRound2($game);
+            $round = 2;
+            if(empty($words)) {
+                $words = $rounds->findLinesRound3($game);
+                $round = 3;
+                if(empty($words)) {
+                    return $this->redirectToRoute('game_end');
+                }
+            }
+        }
+
+        // random and give one Round object
+        shuffle($words);
+        $word = $words[0];
 
         return $this->render('game/play.html.twig', [
+            'game' => $game,
+            'word' => $word,
+            'round' => $round,
+        ]);
+    }
+
+    /**
+     * @Route("/wincard/{word}/team/{team}/round/{round}", name="game_wincard")
+     * @param Round $word
+     * @param Team $team
+     * @param int $round
+     * @return RedirectResponse
+     */
+    public function wincard(Round $word, Team $team, int $round)
+    {
+        switch($round) {
+            case 1:
+                $round = $word->setRound1winner($team);
+                break;
+            case 2:
+                $round = $word->setRound2winner($team);
+                break;
+            case 3:
+                $round = $word->setRound3winner($team);
+                break;
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($round);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('game_play');
+    }
+
+    /**
+     * @Route("/end", name="game_end")
+     */
+    public function end()
+    {
+        $game = $this->getUser()->getGame();
+        return $this->render('game/end.html.twig', [
             'game' => $game,
         ]);
     }
@@ -113,6 +178,7 @@ class GameController extends AbstractController
      * @Route("{id}/add/{team}", name="add_team_to_game")
      * @param Game $game
      * @param Team $team
+     * @return RedirectResponse
      */
     public function addTeamToGame(Game $game, Team $team)
     {
@@ -151,6 +217,9 @@ class GameController extends AbstractController
 
     /**
      * @Route("/{id}", name="game_delete", methods={"DELETE"})
+     * @param Request $request
+     * @param Game $game
+     * @return Response
      */
     public function delete(Request $request, Game $game): Response
     {

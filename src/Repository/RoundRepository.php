@@ -37,6 +37,51 @@ class RoundRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * @param $game
+     * @return Round[] Returns an array of Round objects
+     */
+    public function findLinesRound1($game)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.game = :game')
+            ->andWhere('r.round1winner is null')
+            ->setParameter('game', $game)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
+     * @param $game
+     * @return Round[] Returns an array of Round objects
+     */
+    public function findLinesRound2($game)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.game = :game')
+            ->andWhere('r.round2winner is null')
+            ->setParameter('game', $game)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    /**
+     * @param $game
+     * @return Round[] Returns an array of Round objects
+     */
+    public function findLinesRound3($game)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.game = :game')
+            ->andWhere('r.round3winner is null')
+            ->setParameter('game', $game)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
     // /**
     //  * @return Round[] Returns an array of Round objects
     //  */

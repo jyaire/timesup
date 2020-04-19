@@ -67,12 +67,18 @@ class Team implements UserInterface
      */
     private $creates;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Point", mappedBy="team")
+     */
+    private $points;
+
     public function __construct()
     {
         $this->rounds1 = new ArrayCollection();
         $this->rounds2 = new ArrayCollection();
         $this->rounds3 = new ArrayCollection();
         $this->creates = new ArrayCollection();
+        $this->points = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -295,6 +301,37 @@ class Team implements UserInterface
             // set the owning side to null (unless already changed)
             if ($create->getCreator() === $this) {
                 $create->setCreator(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Point[]
+     */
+    public function getPoints(): Collection
+    {
+        return $this->points;
+    }
+
+    public function addPoint(Point $point): self
+    {
+        if (!$this->points->contains($point)) {
+            $this->points[] = $point;
+            $point->setTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removePoint(Point $point): self
+    {
+        if ($this->points->contains($point)) {
+            $this->points->removeElement($point);
+            // set the owning side to null (unless already changed)
+            if ($point->getTeam() === $this) {
+                $point->setTeam(null);
             }
         }
 
