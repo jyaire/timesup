@@ -5,6 +5,17 @@
 {% block body %}
     <h1>Partie terminée !</h1>
 
-La partie est termminée !
+La partie est terminée !
+{% for team in game.teams %}
+    <h2>{{ team.name }}</h2>
+    {% set score = 0 %}
+    {% for point in points %}
+        {% if team == point.team %}
+        {% set score = score + point.point %}
+        {% endif %}
+    {% endfor %}
+    {{ score }}
+{% endfor %}
+
 
 {% endblock %}

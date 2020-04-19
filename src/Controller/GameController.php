@@ -6,9 +6,9 @@ use App\Entity\Game;
 use App\Entity\Point;
 use App\Entity\Round;
 use App\Entity\Team;
-use App\Entity\Word;
 use App\Form\GameType;
 use App\Repository\GameRepository;
+use App\Repository\PointRepository;
 use App\Repository\RoundRepository;
 use App\Repository\TeamRepository;
 use App\Repository\WordRepository;
@@ -28,6 +28,8 @@ class GameController extends AbstractController
 {
     /**
      * @Route("/", name="game_index", methods={"GET"})
+     * @param GameRepository $gameRepository
+     * @return Response
      */
     public function index(GameRepository $gameRepository): Response
     {
@@ -170,12 +172,19 @@ class GameController extends AbstractController
 
     /**
      * @Route("/end", name="game_end")
+     * @param PointRepository $points
+     * @return Response
      */
-    public function end()
+    public function end(PointRepository $points)
     {
         $game = $this->getUser()->getGame();
+        $points = $points->findBy([
+            'game' => $game,
+        ]);
+
         return $this->render('game/end.html.twig', [
             'game' => $game,
+            'points' => $points,
         ]);
     }
 
