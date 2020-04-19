@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rejoindre une partie{% endblock %}
+
+{% block body %}
+    <h1>Rejoins une partie</h1>
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+    {{ form_end(form) }}
+
+{% endblock %}

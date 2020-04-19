@@ -5,8 +5,12 @@
 {% block body %}
     <main class="index">
         <h1 class="p-3">Time's Up !</h1>
-        <a href="" title="">Rejoindre une partie</a>
+        <a href="{{ path('game_join') }}" title="Rejoindre une partie">Rejoindre une partie</a>
         <a href="{{ path('game_new') }}" title="Nouvelle partie">Nouvelle partie</a>
+        {% if app.user.id is defined %}
         <a href="{{ path('team_show', {'id':app.user.id }) }}" title="Mon équipe">Mon équipe</a>
+        {% else %}
+        <a href="{{ path('app_register') }}" title="Nouvelle équipe">Crée ton équipe</a>
+        {% endif %}
     </main>
 {% endblock %}

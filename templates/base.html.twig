@@ -6,8 +6,14 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
+    {% if app.user.name is defined %}
     Mon équipe : {{ app.user.name }}
+    {% else %}
+        <a href="{{ path('app_login') }}" title="Connexion">Connecte-toi</a>
+    {% endif %}
+
         {% block body %}{% endblock %}
+
         {% block javascripts %}{% endblock %}
     </body>
 </html>

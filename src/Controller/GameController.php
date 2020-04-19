@@ -9,6 +9,7 @@ use App\Repository\GameRepository;
 use App\Repository\TeamRepository;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,9 +31,7 @@ class GameController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="game_new", methods={"GET","POST"})
-     * @return Response
-     * @throws Exception
+     * @Route("/new", name="game_new")
      */
     public function new()
     {
@@ -46,6 +45,39 @@ class GameController extends AbstractController
 
         return $this->redirectToRoute('game_show', [
             'id' => $game->getId(),
+        ]);
+    }
+
+    /**
+     * @Route("/join", name="game_join", methods={"GET","POST"})
+     * @param Request $request
+     * @param GameRepository $games
+     * @return Response
+     */
+    public function join(Request $request, GameRepository $games): Response
+    {
+        $form = $this->createFormBuilder()
+            ->add('game')
+            ->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $idgame = $form->getData()['game'];
+            $game = $games->findOneBy(['id'=>$idgame]);
+            $game->addTeam($this->getUser());
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($game);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('game_show', [
+                'id' => $game->getId(),
+            ]);
+        }
+
+        return $this->render('game/join.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 
@@ -78,12 +110,11 @@ class GameController extends AbstractController
     }
 
     /**
-     * @Route("{id}/add/{team}", name="add_team_to_game", methods={"GET","POST"})
+     * @Route("{id}/add/{team}", name="add_team_to_game")
      * @param Game $game
      * @param Team $team
-     * @return Response
      */
-    public function addTeamToGame(Game $game, Team $team): Response
+    public function addTeamToGame(Game $game, Team $team)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $game->addTeam($team);
@@ -97,6 +128,9 @@ class GameController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="game_edit", methods={"GET","POST"})
+     * @param Request $request
+     * @param Game $game
+     * @return Response
      */
     public function edit(Request $request, Game $game): Response
     {
