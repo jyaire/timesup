@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Game;
+use App\Entity\Point;
 use App\Entity\Round;
 use App\Entity\Team;
 use App\Entity\Word;
@@ -120,15 +121,15 @@ class GameController extends AbstractController
     }
 
     /**
-     * @Route("/wincard/{word}/team/{team}/round/{round}", name="game_wincard")
+     * @Route("/wincard/{word}/team/{team}/round/{roundnb}", name="game_wincard")
      * @param Round $word
      * @param Team $team
-     * @param int $round
+     * @param int $roundnb
      * @return RedirectResponse
      */
-    public function wincard(Round $word, Team $team, int $round)
+    public function wincard(Round $word, Team $team, int $roundnb)
     {
-        switch($round) {
+        switch($roundnb) {
             case 1:
                 $round = $word->setRound1winner($team);
                 break;
@@ -140,8 +141,28 @@ class GameController extends AbstractController
                 break;
         }
 
+        // give point to team who find word
+        $game = $this->getUser()->getGame();
+        $pointFinder = new Point();
+        $pointFinder
+            ->setGame($game)
+            ->setTeam($team)
+            ->setPoint(1)
+            ->setRoundnb($roundnb);
+
+        // give point to team who help to find word
+        $teamHelper = $this->getUser();
+        $pointHelper = new Point();
+        $pointHelper
+            ->setGame($game)
+            ->setTeam($teamHelper)
+            ->setPoint(1)
+            ->setRoundnb($roundnb);
+
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($round);
+        $entityManager->persist($pointFinder);
+        $entityManager->persist($pointHelper);
         $entityManager->flush();
 
         return $this->redirectToRoute('game_play');

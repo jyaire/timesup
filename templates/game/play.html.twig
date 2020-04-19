@@ -9,7 +9,7 @@
     <p>{{ word.word.word }}</p>
     {% for team in game.teams %}
         {% if team.id != app.user.id %}
-            <a href="{{ path('game_wincard', {'team': team.id, 'word': word.id, 'round': round }) }}" title="Gagnant">gagné par {{ team.name }}</a>
+            <a href="{{ path('game_wincard', {'team': team.id, 'word': word.id, 'roundnb': round }) }}" title="Gagnant">gagné par {{ team.name }}</a>
         {% endif %}
     {% endfor %}
     <a href="{{ path('game_play') }}" title="Passer">Passer</a>
