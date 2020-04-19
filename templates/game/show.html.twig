@@ -21,7 +21,7 @@
     {% endfor %}
     </ul>
 
-    <a href="{{ path('add_words_to_game', {'game': game.id }) }}">Choisir des mots</a>
+    <a href="{{ path('add_words_to_game', {'id': game.id }) }}">Choisir des mots</a>
 
 
 {% for role in app.user.roles %}

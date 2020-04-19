@@ -1,11 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Word{% endblock %}
+{% block title %}Ajout de mots{% endblock %}
 
 {% block body %}
-    <h1>Create new Word</h1>
-
+    <h1>Choix des {{ nbwords }} mots</h1>
+{% if list | length < nbwords %}
+    {% set rest = nbwords - list | length %}
+    Vous devez encore choisir {{ rest }} mot{% if rest != 1 %}s{% endif %} :
     {{ include('word/_form.html.twig') }}
+{% else %}
+    <a href="{{ path('game_play') }}"title="Lancer la partie">Lancer la partie</a>
+{% endif %}
 
-    <a href="{{ path('word_index') }}">back to list</a>
+{% if list | length > 0 %}
+    <p>Mes mots :</p>
+    {% for word in list %}
+        {{ word }}
+    {% endfor %}
+{% endif %}
+
 {% endblock %}

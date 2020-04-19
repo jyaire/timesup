@@ -2,21 +2,22 @@
 
 namespace App\Controller;
 
+use App\Entity\Game;
+use App\Entity\Round;
+use App\Entity\Team;
 use App\Entity\Word;
 use App\Form\WordType;
+use App\Repository\RoundRepository;
 use App\Repository\WordRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/word")
- */
 class WordController extends AbstractController
 {
     /**
-     * @Route("/", name="word_index", methods={"GET"})
+     * @Route("/word/", name="word_index", methods={"GET"})
      */
     public function index(WordRepository $wordRepository): Response
     {
@@ -26,32 +27,59 @@ class WordController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="add_words_to_game", methods={"GET","POST"})
+     * @Route("game/{id}/newword", name="add_words_to_game", methods={"GET","POST"})
+     * @param Game $game
+     * @param WordRepository $choices
+     * @param RoundRepository $rounds
      * @param Request $request
      * @return Response
      */
-    public function new(Request $request): Response
+    public function new(Game $game, WordRepository $choices, RoundRepository $rounds, Request $request): Response
     {
+        // number words to add from the team
+        $nbwords = 4;
+
+        // find words already add by the team
+        $words = $rounds->findLinesFromOneCreator($game, $this->getUser());
+        $nb = count($words);
+        $list=[];
+        foreach($words as $word) {
+            $choice = $word->getWord()->getWord();
+            array_push($list, $choice);
+        }
+
+        // create form to add word
         $word = new Word();
         $form = $this->createForm(WordType::class, $word);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $round = new Round();
+            $round
+                ->setGame($game)
+                ->setWord($word)
+                ->setCreator($this->getUser());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($word);
+            $entityManager->persist($round);
             $entityManager->flush();
 
-            return $this->redirectToRoute('word_index');
+            return $this->redirectToRoute('add_words_to_game', [
+                'id' => $game->getId(),
+            ]);
         }
 
         return $this->render('word/new.html.twig', [
+            'game' => $game,
             'word' => $word,
+            'list' => $list,
+            'nbwords' => $nbwords,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}", name="word_show", methods={"GET"})
+     * @Route("/word/{id}", name="word_show", methods={"GET"})
      */
     public function show(Word $word): Response
     {
@@ -61,7 +89,7 @@ class WordController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="word_edit", methods={"GET","POST"})
+     * @Route("/word/{id}/edit", name="word_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Word $word): Response
     {
@@ -81,7 +109,7 @@ class WordController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="word_delete", methods={"DELETE"})
+     * @Route("/word/{id}", name="word_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Word $word): Response
     {

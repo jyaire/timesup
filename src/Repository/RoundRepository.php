@@ -19,6 +19,24 @@ class RoundRepository extends ServiceEntityRepository
         parent::__construct($registry, Round::class);
     }
 
+    /**
+     * @param $game
+     * @param $creator
+     * @return Round[] Returns an array of Round objects
+     */
+    public function findLinesFromOneCreator($game, $creator)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.game = :game')
+            ->andWhere('r.creator = :creator')
+            ->setParameter('game', $game)
+            ->setParameter('creator', $creator)
+            ->orderBy('r.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return Round[] Returns an array of Round objects
     //  */

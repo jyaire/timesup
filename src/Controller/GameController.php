@@ -50,6 +50,18 @@ class GameController extends AbstractController
     }
 
     /**
+     * @Route("/play", name="game_play")
+     */
+    public function play()
+    {
+        $game = $this->getUser()->getGame();
+
+        return $this->render('game/play.html.twig', [
+            'game' => $game,
+        ]);
+    }
+
+    /**
      * @Route("/{id}", name="game_show", methods={"GET"})
      * @param Game $game
      * @param TeamRepository $teams
