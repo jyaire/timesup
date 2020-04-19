@@ -26,7 +26,9 @@ class WordController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="word_new", methods={"GET","POST"})
+     * @Route("/new", name="add_words_to_game", methods={"GET","POST"})
+     * @param Request $request
+     * @return Response
      */
     public function new(Request $request): Response
     {

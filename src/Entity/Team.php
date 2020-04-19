@@ -62,11 +62,17 @@ class Team implements UserInterface
      */
     private $rounds3;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Round", mappedBy="creator")
+     */
+    private $creates;
+
     public function __construct()
     {
         $this->rounds1 = new ArrayCollection();
         $this->rounds2 = new ArrayCollection();
         $this->rounds3 = new ArrayCollection();
+        $this->creates = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -258,6 +264,37 @@ class Team implements UserInterface
             // set the owning side to null (unless already changed)
             if ($rounds3->getRound3winner() === $this) {
                 $rounds3->setRound3winner(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Round[]
+     */
+    public function getCreates(): Collection
+    {
+        return $this->creates;
+    }
+
+    public function addCreate(Round $create): self
+    {
+        if (!$this->creates->contains($create)) {
+            $this->creates[] = $create;
+            $create->setCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCreate(Round $create): self
+    {
+        if ($this->creates->contains($create)) {
+            $this->creates->removeElement($create);
+            // set the owning side to null (unless already changed)
+            if ($create->getCreator() === $this) {
+                $create->setCreator(null);
             }
         }
 

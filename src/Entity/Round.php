@@ -43,6 +43,12 @@ class Round
      */
     private $round3winner;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Team", inversedBy="creates")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $creator;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -104,6 +110,18 @@ class Round
     public function setRound3winner(?Team $round3winner): self
     {
         $this->round3winner = $round3winner;
+
+        return $this;
+    }
+
+    public function getCreator(): ?Team
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(?Team $creator): self
+    {
+        $this->creator = $creator;
 
         return $this;
     }
