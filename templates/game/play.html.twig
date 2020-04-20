@@ -3,17 +3,22 @@
 {% block title %}Partie {{ game.id }}{% endblock %}
 
 {% block body %}
-    <h1>Partie {{ game.id }}</h1>
+    <h1 class="primary-title">Partie {{ game.id }} - Manche {{ round }}</h1>
 
-    <p>Manche {{ round }}</p>
-    <p>{{ word.word.word }}</p>
-    {% for team in game.teams %}
-        {% if team.id != app.user.id %}
-            <a href="{{ path('game_wincard', {'team': team.id, 'word': word.id, 'roundnb': round }) }}" title="Gagnant">gagné par {{ team.name }}</a>
-        {% endif %}
-    {% endfor %}
-    <a href="{{ path('game_play') }}" title="Passer">Passer</a>
-
-
+    <div class="row border border-secondary bg-ligh justify-content-center p-3">
+        <h1 class="text-uppercase">{{ word.word.word }}</h1>
+    </div>
+    <div class="row border-secondary align-self-center">
+        <div class="col">
+            Mot gagné par :
+            {% for team in game.teams %}
+                {% if team.id != app.user.id %}
+                    <a class="primary-button" href="{{ path('game_wincard', {'team': team.id, 'word': word.id, 'roundnb': round }) }}" title="Gagnant">{{ team.name }}</a>
+                {% endif %}
+            {% endfor %}
+            <a class="third-button border border-bottom border-secondary"  href="{{ path('game_play') }}" title="Passer">Passer</a>
+            <a class="fourth-button" href="{{ path('game_wait') }}" title="Passer">Chrono terminé</a>
+        </div>
+    </div>
 
 {% endblock %}

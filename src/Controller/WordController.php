@@ -40,7 +40,7 @@ class WordController extends AbstractController
     {
         // number words to add for each team
         $nbteams = count($game->getTeams());
-        $nbwords = round(40 / $nbteams);
+        $nbwords = round($game->getNbWords() / $nbteams);
 
         // find words already add by the team
         $words = $rounds->findLinesFromOneCreator($game, $this->getUser());

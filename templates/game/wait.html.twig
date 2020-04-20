@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Partie {{ game.id }}{% endblock %}
+
+{% block body %}
+    <h1 class="primary-title">Partie {{ game.id }}</h1>
+
+    <div class="row">
+        <div class="col">
+            <p>Clique lorsque c'est à ton équipe de faire deviner des mots. Mets un minuteur de 30s dès le clic.</p>
+            <a class="secondary-button" href="{{ path('game_play') }}" title="Jouer">C'est à mon équipe !</a>
+        </div>
+    </div>
+
+{% endblock %}

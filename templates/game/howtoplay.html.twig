@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Règles du jeu{% endblock %}
+
+{% block body %}
+    <h2 class="primary-title">Règles du jeu</h2>
+
+    <p>Une partie se joue avec 40 mots.</p>
+    <p>Sur des périodes successives de 30 secondes, les équipes à tour de rôle piochent les cartes pour faire deviner
+        aux autres équipes le mot inscrit.</p>
+    <ul>
+        <li>Manche 1 : tout est permis, sauf dire le mot ou un mot de la même famille. Plusieurs propositions possibles
+        de la part des équipes adverses.</li><br>
+        <li>Manche 2 : On ne peut dire qu'un seul mot, une seule réponse par équipe est autorisée.</li><br>
+        <li>Manche 3 : il faut mimer le mot. Une seule proposition par équipe autorisée.</li><br>
+    </ul>
+
+    <p>A tout moment, pendant les 30s, l'équipe qui fait deviner peut passer à la carte suivante.</p>
+
+    <ul>
+        <li>L'équipe qui fait deviner un mot gagne 1 point.</li>
+        <li>L'équipe la première à deviner un mot gagne 1 point.</li><br>
+    </ul>
+
+    <p>L'équipe gagnante est celle qui a le plus grand score à la fin des 3 manches.</p>
+
+{% endblock %}

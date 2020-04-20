@@ -3,14 +3,25 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+    <h2>Crée une équipe</h2>
 
     {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.name) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword) }}
-        {{ form_row(registrationForm.agreeTerms) }}
-
-        <button class="btn">Register</button>
+    <p>
+        {{ form_label(registrationForm.name, 'Nom de l\'équipe', { 'label_attr': {'class': 'form'} })}}
+        {{ form_widget(registrationForm.name, {'attr': {'class': 'form-control'}}) }}
+    </p>
+    <p>
+        {{ form_label(registrationForm.email, 'Email', { 'label_attr': {'class': 'form'} })}}
+        {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control'}}) }}
+    </p>
+    <p>
+        {{ form_label(registrationForm.plainPassword, 'Mot de passe', { 'label_attr': {'class': 'form'} })}}
+        {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control'}}) }}
+    </p>
+    <p>
+        {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-label'}}) }}
+        {{ form_label(registrationForm.agreeTerms, 'j\'accepte les termes', { 'label_attr': {'class': 'form'} })}}
+    </p>
+        <button class="secondary-button">Créer mon équipe</button>
     {{ form_end(registrationForm) }}
 {% endblock %}

@@ -3,20 +3,27 @@
 {% block title %}Ajout de mots{% endblock %}
 
 {% block body %}
-    <h1>Choix des {{ nbwords }} mots</h1>
+    <h1 class="primary-title">Choix des {{ nbwords }} mots</h1>
 {% if list | length < nbwords %}
     {% set rest = nbwords - list | length %}
     Vous devez encore choisir {{ rest }} mot{% if rest != 1 %}s{% endif %} :
-    {{ include('word/_form.html.twig') }}
+    {{ form_start(form) }}
+    {{ form_widget(form.word, {'attr': {'class': 'form-control'}}) }}
+    <button class="secondary-button">{{ button_label|default('Save') }}</button>
+    {{ form_end(form) }}
 {% else %}
-    <a href="{{ path('game_play') }}"title="Lancer la partie">Lancer la partie</a>
+    <a class="secondary-button" href="{{ path('game_wait') }}"title="Lancer la partie">Lancer la partie</a>
 {% endif %}
 
 {% if list | length > 0 %}
     <p>Mes mots :</p>
+    <div class="row justify-content-center">
     {% for word in list %}
-        {{ word }}
+        <div class="col-5 border border-secondary text-center align-self-center m-2">
+        {{ loop.index }} - {{ word }}
+        </div>
     {% endfor %}
+    </div>
 {% endif %}
 
 {% endblock %}

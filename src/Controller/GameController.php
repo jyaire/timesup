@@ -90,6 +90,17 @@ class GameController extends AbstractController
     }
 
     /**
+     * @Route("/wait", name="game_wait")
+     */
+    public function wait()
+    {
+        $game = $this->getUser()->getGame();
+        return $this->render('game/wait.html.twig', [
+            'game' => $game,
+        ]);
+    }
+
+    /**
      * @Route("/play", name="game_play")
      * @param RoundRepository $rounds
      * @return Response

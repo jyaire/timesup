@@ -3,26 +3,29 @@
 {% block title %}Partie {{ game.id }}{% endblock %}
 
 {% block body %}
-    <h1>Partie {{ game.id }}</h1>
+    <h2 class="primary-title">Partie n°{{ game.id }}</h2>
 
-    <p>Lancée le {{ game.date ? game.date|date('d/m/Y à H:i:s') : '' }}</p>
+    {% if game.teams | length >= 3 %}
+        <a class="secondary-button" href="{{ path('add_words_to_game', {'id': game.id}) }}">Choisir mes mots</a>
+    {% endif %}
 
-    <p>Teams inscrites :</p>
-    <ul>
-                {% for team in game.teams %}
-                    <li>{{ team.name }}</li>
-                {% endfor %}
-    </ul>
+    <div class="row third-bg">
+        <div class="col">
+        <p>Participants</p>
+            {% for team in game.teams %}
+                <p class="secondary-button">{{ team.name }}</p>
+            {% endfor %}
+        </div>
+    </div>
 
     <p>Inscrire une autre team :</p>
-    <ul>
+
     {% for team in teams %}
-        <li><a href="{{ path('add_team_to_game', {'id': game.id, 'team': team.id }) }}">{{ team.name }}</a></li>
+        <a class="secondary-button" href="{{ path('add_team_to_game', {'id': game.id, 'team': team.id }) }}">{{ team.name }}</a>
     {% endfor %}
-    </ul>
 
-    <a href="{{ path('add_words_to_game', {'id': game.id }) }}">Choisir des mots</a>
-
+    <p>Lancée le {{ game.date ? game.date|date('d/m/Y à H:i:s') : '' }}</p>
+    <a href="{{ path('howtoplay') }}">Lire les règles du jeu ?</a>
 
 {% for role in app.user.roles %}
     {% if role == "ROLE_ADMIN" %}

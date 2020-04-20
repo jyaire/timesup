@@ -3,11 +3,11 @@
 {% block title %}Rejoindre une partie{% endblock %}
 
 {% block body %}
-    <h1>Rejoins une partie</h1>
+    <h2 class="primary-title">Rejoins une partie</h2>
 
     {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    numéro fourni {{ form_widget(form.game, {'attr': {'class': 'form-control'}}) }}
+    <button class="secondary-button">{{ button_label|default('Joindre cette partie') }}</button>
     {{ form_end(form) }}
 
 {% endblock %}
