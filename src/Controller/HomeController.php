@@ -26,4 +26,12 @@ class HomeController extends AbstractController
     {
         return $this->render('game/howtoplay.html.twig');
     }
+
+    /**
+     * @Route("/terms", name="terms")
+     */
+    public function terms()
+    {
+        return $this->render('home/terms.html.twig');
+    }
 }

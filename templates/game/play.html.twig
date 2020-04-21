@@ -6,10 +6,10 @@
     <h1 class="primary-title">Partie {{ game.id }} - Manche {{ round }}</h1>
 
     <div class="row border border-secondary bg-ligh justify-content-center p-3">
-        <h1 class="text-uppercase">{{ word.word.word }}</h1>
+        <h1 class="text-uppercase text-dark">{{ word.word.word }}</h1>
     </div>
     <div class="row border-secondary align-self-center">
-        <div class="col">
+        <div class="col text-center">
             Mot gagné par :
             {% for team in game.teams %}
                 {% if team.id != app.user.id %}

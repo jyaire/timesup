@@ -3,7 +3,7 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h2>Crée une équipe</h2>
+    <h2 class="primary-title">Crée une équipe</h2>
 
     {{ form_start(registrationForm) }}
     <p>
@@ -22,6 +22,6 @@
         {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-label'}}) }}
         {{ form_label(registrationForm.agreeTerms, 'j\'accepte les termes', { 'label_attr': {'class': 'form'} })}}
     </p>
-        <button class="secondary-button">Créer mon équipe</button>
+        <button class="secondary-button">Je crée mon équipe</button>
     {{ form_end(registrationForm) }}
 {% endblock %}

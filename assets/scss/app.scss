@@ -9,7 +9,6 @@ body{
     font-size : 1rem;
     font-weight: 600;
     color: $fourth-color;
-    background-color: $primary-color;
 }
 
 a {
@@ -72,7 +71,7 @@ a:hover {
     border-radius : 5px;
     text-decoration : none;
     font-size : 1.1rem;
-    color: $primary-color;
+    color: $third-color;
     font-weight: bold;
     width : 60%;
     max-width: 250px;
@@ -92,7 +91,7 @@ a:hover {
         -webkit-transform: scale(1.1);
         transform: scale(1.1);
         background-color: darken($color, 10%); ;
-        color: $primary-color;
+        color: $third-color;
         text-decoration: none;
     }
     @media screen and (min-width: 740px) {
@@ -106,11 +105,11 @@ a:hover {
 }
 
 .secondary-button{
-    @include button($secondary-color)
+    @include button($fourth-color)
 }
 
 .third-button{
-    @include button($secondary-color);
+    @include button($fourth-color);
     width: 80%;
 }
 
@@ -143,16 +142,17 @@ a:hover {
 .topnavbar {
     background-color: $fourth-color;
     color: $third-color;
+    box-shadow: 10px 0 15px rgb(135,151,151);
 
     a {
         text-decoration: none;
-        color: $primary-color;
+        color: $third-color;
         font-weight: bold;
     }
 
     a:hover {
         text-decoration: none;
-        color: $third-color;
+        color: $primary-color;
     }
 }
 
