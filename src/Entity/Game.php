@@ -43,11 +43,22 @@ class Game
      */
     private $points;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isFinished;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\History", mappedBy="game")
+     */
+    private $histories;
+
     public function __construct()
     {
         $this->teams = new ArrayCollection();
         $this->rounds = new ArrayCollection();
         $this->points = new ArrayCollection();
+        $this->histories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -166,6 +177,49 @@ class Game
             // set the owning side to null (unless already changed)
             if ($point->getGame() === $this) {
                 $point->setGame(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getIsFinished(): ?bool
+    {
+        return $this->isFinished;
+    }
+
+    public function setIsFinished(bool $isFinished): self
+    {
+        $this->isFinished = $isFinished;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|History[]
+     */
+    public function getHistories(): Collection
+    {
+        return $this->histories;
+    }
+
+    public function addHistory(History $history): self
+    {
+        if (!$this->histories->contains($history)) {
+            $this->histories[] = $history;
+            $history->setGame($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHistory(History $history): self
+    {
+        if ($this->histories->contains($history)) {
+            $this->histories->removeElement($history);
+            // set the owning side to null (unless already changed)
+            if ($history->getGame() === $this) {
+                $history->setGame(null);
             }
         }
 
