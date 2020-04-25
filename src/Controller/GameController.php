@@ -51,6 +51,7 @@ class GameController extends AbstractController
             ->addTeam($team)
             ->setNbWords(40)
             ->setIsFinished(0)
+            ->setIsComposed(0)
         ;
         $entityManager->persist($game);
         $entityManager->flush();
@@ -121,6 +122,10 @@ class GameController extends AbstractController
                 $words = $rounds->findLinesRound3($game);
                 $round = 3;
                 if(empty($words)) {
+                    $game = $game->setIsFinished(1);
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($game);
+                    $entityManager->flush();
                     return $this->redirectToRoute('game_end');
                 }
             }

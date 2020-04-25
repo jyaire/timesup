@@ -49,18 +49,16 @@ class RoundController extends AbstractController
         $list = $rounds->findLinesFromOneCreator($game, $this->getUser());
 
         // create form to add word
-        $word = new Round();
-        $form = $this->createForm(RoundType::class, $word);
+        $round = new Round();
+        $form = $this->createForm(RoundType::class, $round);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $round = new Round();
+            $round = $form->getData();
             $round
                 ->setGame($game)
-                //->setWord($form->get('word')->getData())
                 ->setCreator($this->getUser());
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($word);
             $entityManager->persist($round);
             $entityManager->flush();
 
@@ -69,9 +67,8 @@ class RoundController extends AbstractController
             ]);
         }
 
-        return $this->render('word/new.html.twig', [
+        return $this->render('game/newword.html.twig', [
             'game' => $game,
-            'word' => $word,
             'list' => $list,
             'nbwords' => $nbwords,
             'form' => $form->createView(),
@@ -79,54 +76,19 @@ class RoundController extends AbstractController
     }
 
     /**
-     * @Route("/word/{id}", name="word_show", methods={"GET"})
+     * @Route("game/{game}/deleteword/{id}", name="round_delete")
+     * @param Game $game
      * @param Round $word
      * @return Response
      */
-    public function show(Round $word): Response
+    public function delete(Game $game, Round $word): Response
     {
-        return $this->render('word/show.html.twig', [
-            'word' => $word,
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($word);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('add_words_to_game', [
+            'id' => $game->getId(),
         ]);
-    }
-
-    /**
-     * @Route("/word/{id}/edit", name="word_edit", methods={"GET","POST"})
-     * @param Request $request
-     * @param Round $round
-     * @return Response
-     */
-    public function edit(Request $request, Round $round): Response
-    {
-        $form = $this->createForm(RoundType::class, $round);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('round_index');
-        }
-
-        return $this->render('word/edit.html.twig', [
-            'round' => $round,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("game/word/{id}", name="word_delete", methods={"DELETE"})
-     * @param Request $request
-     * @param Round $word
-     * @return Response
-     */
-    public function delete(Request $request, Round $word): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$word->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($word);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('round_index');
     }
 }

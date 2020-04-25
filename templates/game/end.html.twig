@@ -3,18 +3,23 @@
 {% block title %}Partie terminée{% endblock %}
 
 {% block body %}
-    <h1>Partie terminée !</h1>
+    <h1 class="primary-title">Partie terminée !</h1>
 
-La partie est terminée !
 {% for team in game.teams %}
-    <h2>{{ team.name }}</h2>
-    {% set score = 0 %}
-    {% for point in points %}
-        {% if team == point.team %}
-        {% set score = score + point.point %}
-        {% endif %}
-    {% endfor %}
-    {{ score }}
+    <div class="row p-3 border-bottom border-secondary align-items-center">
+        <div class="col-7 text-right">
+    <h4>{{ team.name }}</h4>
+        </div>
+        <div class="col-5">
+            {% set score = 0 %}
+            {% for point in points %}
+                {% if team == point.team %}
+                {% set score = score + point.point %}
+                {% endif %}
+            {% endfor %}
+            {{ score }} points
+        </div>
+    </div>
 {% endfor %}
 
     <div class="row">

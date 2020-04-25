@@ -19,13 +19,13 @@
     <p>Mes mots :</p>
     <div class="row justify-content-center">
     {% for word in list %}
-        <div class="col-5 border border-secondary text-center align-self-center m-2">
-            <a href="{{ path('word_delete', {'word': word}) }}">
-                {{ loop.index }} - {{ word }}
-            </a>
-        </div>
+        <a class="col-5 border border-secondary text-center align-self-center m-2"
+           href="{{ path('round_delete', {'id': word.id, 'game': game.id}) }}">
+            {{ loop.index }} - {{ word.word }}
+        </a>
     {% endfor %}
     </div>
+    <p>(clic pour supprimer un mot)</p>
 {% endif %}
 
 {% endblock %}
