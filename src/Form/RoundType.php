@@ -2,12 +2,12 @@
 
 namespace App\Form;
 
-use App\Entity\Word;
+use App\Entity\Round;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class WordType extends AbstractType
+class RoundType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -19,7 +19,7 @@ class WordType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Word::class,
+            'data_class' => Round::class,
         ]);
     }
 }

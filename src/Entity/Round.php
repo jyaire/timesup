@@ -23,12 +23,6 @@ class Round
     private $game;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Word", inversedBy="rounds")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $word;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Team", inversedBy="round2winner")
      */
     private $round1winner;
@@ -49,6 +43,11 @@ class Round
      */
     private $creator;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $word;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -62,18 +61,6 @@ class Round
     public function setGame(?Game $game): self
     {
         $this->game = $game;
-
-        return $this;
-    }
-
-    public function getWord(): ?Word
-    {
-        return $this->word;
-    }
-
-    public function setWord(?Word $word): self
-    {
-        $this->word = $word;
 
         return $this;
     }
@@ -122,6 +109,18 @@ class Round
     public function setCreator(?Team $creator): self
     {
         $this->creator = $creator;
+
+        return $this;
+    }
+
+    public function getWord(): ?string
+    {
+        return $this->word;
+    }
+
+    public function setWord(string $word): self
+    {
+        $this->word = $word;
 
         return $this;
     }

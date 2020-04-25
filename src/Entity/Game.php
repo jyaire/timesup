@@ -53,6 +53,11 @@ class Game
      */
     private $histories;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isComposed;
+
     public function __construct()
     {
         $this->teams = new ArrayCollection();
@@ -222,6 +227,18 @@ class Game
                 $history->setGame(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsComposed(): ?bool
+    {
+        return $this->isComposed;
+    }
+
+    public function setIsComposed(bool $isComposed): self
+    {
+        $this->isComposed = $isComposed;
 
         return $this;
     }

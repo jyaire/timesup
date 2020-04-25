@@ -11,10 +11,8 @@ use App\Repository\GameRepository;
 use App\Repository\PointRepository;
 use App\Repository\RoundRepository;
 use App\Repository\TeamRepository;
-use App\Repository\WordRepository;
-use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,6 +21,7 @@ use \Datetime;
 
 /**
  * @Route("/game")
+ * @IsGranted("ROLE_USER")
  */
 class GameController extends AbstractController
 {
@@ -47,7 +46,12 @@ class GameController extends AbstractController
         $game = new Game();
         $team = $this->getUser();
         $entityManager = $this->getDoctrine()->getManager();
-        $game->setDate(new Datetime())->addTeam($team)->setNbWords(40);
+        $game
+            ->setDate(new Datetime())
+            ->addTeam($team)
+            ->setNbWords(40)
+            ->setIsFinished(0)
+        ;
         $entityManager->persist($game);
         $entityManager->flush();
 
@@ -216,7 +220,7 @@ class GameController extends AbstractController
     }
 
     /**
-     * @Route("{id}/add/{team}", name="add_team_to_game")
+     * @Route("/{id}/add/{team}", name="add_team_to_game")
      * @param Game $game
      * @param Team $team
      * @return RedirectResponse
@@ -225,6 +229,41 @@ class GameController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $game->addTeam($team);
+        $entityManager->persist($game);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('game_show', [
+            'id' => $game->getId(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/delete/{team}", name="delete_team_from_game")
+     * @param Game $game
+     * @param Team $team
+     * @return RedirectResponse
+     */
+    public function deleteTeamFromGame(Game $game, Team $team)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $game->removeTeam($team);
+        $entityManager->persist($game);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('game_show', [
+            'id' => $game->getId(),
+        ]);
+    }
+
+    /**
+     * @Route("/validate/{id}", name="validate_game")
+     * @param Game $game
+     * @return RedirectResponse
+     */
+    public function validateGame(Game $game)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $game->setIsComposed(1);
         $entityManager->persist($game);
         $entityManager->flush();
 

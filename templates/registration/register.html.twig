@@ -9,14 +9,17 @@
     <p>
         {{ form_label(registrationForm.name, 'Nom de l\'équipe', { 'label_attr': {'class': 'form'} })}}
         {{ form_widget(registrationForm.name, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(registrationForm.name, {'attr': {'class': 'form-error'}}) }}
     </p>
     <p>
         {{ form_label(registrationForm.email, 'Email', { 'label_attr': {'class': 'form'} })}}
         {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(registrationForm.email) }}
     </p>
     <p>
         {{ form_label(registrationForm.plainPassword, 'Mot de passe', { 'label_attr': {'class': 'form'} })}}
         {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control'}}) }}
+        {{ form_errors(registrationForm.plainPassword) }}
     </p>
     <p>
         {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'form-check-label'}}) }}

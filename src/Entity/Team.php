@@ -10,7 +10,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TeamRepository")
- * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
+ * @UniqueEntity(
+ *     fields={"email"},
+ *     message="Cette adresse mail est déjà utilisée")
+ *  @UniqueEntity(
+ *     fields={"name"},
+ *     message="Ce nom d'équipe est déjà utilisé")
  */
 class Team implements UserInterface
 {

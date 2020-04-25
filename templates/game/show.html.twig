@@ -6,25 +6,39 @@
     <h2 class="primary-title">Partie n°{{ game.id }}</h2>
 
     {% if game.teams | length >= 3 %}
-        <a class="secondary-button" href="{{ path('add_words_to_game', {'id': game.id}) }}">Choisir mes mots</a>
+        {% if game.isComposed == true %}
+            <a class="secondary-button" href="{{ path('add_words_to_game', {'id': game.id}) }}">Choisir mes mots</a>
+        {% else %}
+            <a class="secondary-button" href="{{ path('validate_game', {'id': game.id}) }}">
+                Valider ces {{ game.teams | length }} équipes
+            </a>
+        {% endif %}
     {% endif %}
 
     <div class="row third-bg">
         <div class="col">
         <p>Participants (3 minimum)</p>
             {% for team in game.teams %}
-                <p class="secondary-button">{{ team.name }}</p>
+                <a class="primary-button"
+                   href="{{ path('delete_team_from_game', {'id': game.id, 'team': team.id }) }}">
+                    {{ team.name }}
+                </a>
             {% endfor %}
+            {% if game.isComposed == 0 %}
+            <p>Clic pour enlever</p>
+            {% endif %}
         </div>
     </div>
+    {% if game.isComposed == 0 %}
+            <p>Inscrire une autre team :</p>
 
-    <p>Inscrire une autre team :</p>
+            {% for team in teams %}
+                <a class="secondary-button" href="{{ path('add_team_to_game', {'id': game.id, 'team': team.id }) }}">{{ team.name }}</a>
+            {% endfor %}
 
-    {% for team in teams %}
-        <a class="secondary-button" href="{{ path('add_team_to_game', {'id': game.id, 'team': team.id }) }}">{{ team.name }}</a>
-    {% endfor %}
+        {% endif %}
 
-    <p>Lancée le {{ game.date ? game.date|date('d/m/Y à H:i:s') : '' }}</p>
+    <p>Partie lancée le {{ game.date ? game.date|date('d/m/Y à H:i:s') : '' }}</p>
     <a href="{{ path('howtoplay') }}">Lire les règles du jeu ?</a>
 
 {% for role in app.user.roles %}

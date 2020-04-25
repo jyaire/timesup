@@ -9,7 +9,7 @@
     Vous devez encore choisir {{ rest }} mot{% if rest != 1 %}s{% endif %} :
     {{ form_start(form) }}
     {{ form_widget(form.word, {'attr': {'class': 'form-control'}}) }}
-    <button class="secondary-button">{{ button_label|default('Save') }}</button>
+    <button class="secondary-button">{{ button_label|default('Enregistrer') }}</button>
     {{ form_end(form) }}
 {% else %}
     <a class="secondary-button" href="{{ path('game_wait') }}"title="Lancer la partie">Lancer la partie</a>
@@ -20,7 +20,9 @@
     <div class="row justify-content-center">
     {% for word in list %}
         <div class="col-5 border border-secondary text-center align-self-center m-2">
-        {{ loop.index }} - {{ word }}
+            <a href="{{ path('word_delete', {'word': word}) }}">
+                {{ loop.index }} - {{ word }}
+            </a>
         </div>
     {% endfor %}
     </div>

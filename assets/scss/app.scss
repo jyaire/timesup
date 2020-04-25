@@ -154,5 +154,17 @@ a:hover {
         text-decoration: none;
         color: $primary-color;
     }
+
+/* REGISTRATION */
+
+    form {
+        ul {
+            li {
+                list-style: none;
+                color: red;
+            }
+        }
+    }
+
 }
 
