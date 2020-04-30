@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Game;
+use App\Entity\History;
 use App\Entity\Point;
 use App\Entity\Round;
 use App\Entity\Team;
@@ -126,7 +127,9 @@ class GameController extends AbstractController
                     $entityManager = $this->getDoctrine()->getManager();
                     $entityManager->persist($game);
                     $entityManager->flush();
-                    return $this->redirectToRoute('game_end');
+                    return $this->redirectToRoute('game_end', [
+                        'id' => $game->getId(),
+                    ]);
                 }
             }
         }
@@ -191,13 +194,13 @@ class GameController extends AbstractController
     }
 
     /**
-     * @Route("/end", name="game_end")
+     * @Route("/end/{id}", name="game_end")
+     * @param Game $game
      * @param PointRepository $points
      * @return Response
      */
-    public function end(PointRepository $points)
+    public function end(Game $game, PointRepository $points)
     {
-        $game = $this->getUser()->getGame();
         $points = $points->findBy([
             'game' => $game,
         ]);
@@ -269,6 +272,15 @@ class GameController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $game->setIsComposed(1);
+        foreach($game->getTeams() as $team) {
+            $history = new History();
+            $history
+                ->setTeam($team)
+                ->setGame($game)
+                ->setScore(0)
+                ;
+            $entityManager->persist($history);
+        }
         $entityManager->persist($game);
         $entityManager->flush();
 

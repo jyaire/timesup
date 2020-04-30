@@ -13,7 +13,25 @@
             </tr>
             <tr>
                 <th>Email</th>
-                <td>{{ team.email }}</td>
+                {% if app.user == team %}
+                    <td>{{ team.email }}</td>
+                {% else %}
+                    <td>information privée</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <th>Parties jouées</th>
+                <td>
+                    <ul>
+                    {% for history in team.histories %}
+                        <li>
+                            <a href="{{ path('game_show', {'id': history.game.id }) }}" alt="Partie {{ history.game.id }}">Partie {{ history.game.id }}</a>
+                        </li>
+                        {% else %}
+                        Aucune partie enregistrée
+                    {% endfor %}
+                    </ul>
+                </td>
             </tr>
         </tbody>
     </table>
